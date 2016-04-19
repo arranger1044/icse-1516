@@ -1,0 +1,1 @@
+(unwatch all)(clear)(set-strategy depth)(open "miscfnx.rsl" miscfnx "w")(dribble-on "miscfnx.out")(batch "miscfnx.bat")(dribble-off)(load "compline.clp")(printout miscfnx "miscfnx.bat differences are as follows:" crlf)(compare-files miscfnx.exp miscfnx.out miscfnx); close result file(close miscfnx)

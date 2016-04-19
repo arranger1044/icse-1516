@@ -1,0 +1,1 @@
+(unwatch all)(clear)(set-strategy depth)(open "drtest08.rsl" drtest08 "w")(dribble-on "drtest08.out")(batch "drtest08.bat")(dribble-off)(load "compline.clp")(printout drtest08 "drtest08.bat differences are as follows:" crlf)(compare-files drtest08.exp drtest08.out drtest08); close result file(close drtest08)
