@@ -1,0 +1,123 @@
+%\usepackage[utf8]{inputenc}
+\usepackage{listings}
+\usepackage{xcolor}
+
+
+%
+% I asked on stackoverflow for rainbow parentheses
+% http://tex.stackexchange.com/questions/235740/rainbow-parentheses-in-lisp-listings
+% the palette is from solarized theme
+\definecolor{solarized-cyan}{RGB}{42, 161, 152}
+\definecolor{solarized-magenta}{RGB}{211, 54, 130}
+\definecolor{solarized-yellow}{RGB}{181, 137, 0}
+\definecolor{solarized-violet}{RGB}{108, 113, 196}
+\definecolor{solarized-red}{RGB}{220, 50, 47}
+\definecolor{solarized-orange}{RGB}{203, 75, 22}
+\definecolor{solarized-grey}{RGB}{101, 123, 131}
+
+\lstdefinelanguage{clips}
+{
+  classoffset=0,
+  morekeywords ={deffunction, deftemplate, defglobal, defmodule, defrule, deffacts, nil, assert, retract},
+  keywordstyle=\bfseries\color{solarized-orange},
+  classoffset=1,
+  morekeywords ={delcare, salience, run, slot, multislot, clear, reset, facts, exit, agenda, initial-fact, watch, ppdefrule, unwatch, printout, if, then, else, while, loop-count, crlf, read, readline},
+  keywordstyle=\bfseries,
+  %classoffset=2,
+  %keywordsprefix=\?,
+  %alsoletter=\?,
+  %keywordstyle=\itshape\color{solarized-red},
+  classoffset=0,
+  sensitive=true,
+  morecomment=[l]{;},
+  morestring=[b]{"},
+  stringstyle=\color{solarized-grey},
+  basicstyle=\scriptsize,%\ttfamily\scriptsize,
+  numbers=left,
+  numbersep=-5pt,
+  numberstyle=\tiny,
+  showstringspaces=false,
+  }
+
+\renewcommand{\ttdefault}{pcr}
+
+% egreg's modulo macro (see http://tex.stackexchange.com/a/34449/21891)
+\def\truncdiv#1#2{((#1-(#2-1)/2)/#2)}
+\def\moduloop#1#2{(#1-\truncdiv{#1}{#2}*#2)}
+\def\modulo#1#2{\number\numexpr\moduloop{#1}{#2}\relax}    
+
+\makeatletter
+
+% a TeX counter to keep track of the nesting level
+\newcount\netParensCount@clisp
+
+% Modify how ( and ) get typeset depending on the value of the counter
+% (Based on Ulrike Fischer's approach to modifying characters in listings;
+% see http://tex.stackexchange.com/a/231927/21891)
+\lst@CCPutMacro
+\lst@ProcessOther{`(}{{%
+    \ifnum\lst@mode=\lst@Pmode\relax%
+    \rainbow@clisp{(}%
+    \global\advance\netParensCount@clisp by \@ne%
+    \else
+    (%
+    \fi
+  }}%
+\lst@ProcessOther{`)}{{%
+    \ifnum\lst@mode=\lst@Pmode\relax%
+    \global\advance\netParensCount@clisp by \m@ne%
+    \rainbow@clisp{)}%
+    \else
+    )%
+    \fi
+  }}%
+\@empty\z@\@empty
+% Color its argument based on the value of the \netParensCount@clisp counter
+% (modulo 5)
+\newcommand\rainbow@clisp[1]{%
+  \ifcase\modulo\netParensCount@clisp 5\relax%
+  \textcolor{solarized-cyan}{\bfseries#1}%
+  \or
+  \textcolor{solarized-yellow}{\bfseries#1}%
+  \or
+  \textcolor{solarized-magenta}{\bfseries#1}%
+  \or
+  \textcolor{solarized-violet}{\bfseries#1}%
+  \else
+  \textcolor{solarized-red}{\bfseries#1}%
+  \fi
+}
+
+% Alternatively, you could simplify the definition of \rainbow@clisp to...
+% \newcommand\rainbow@clisp[1]{%
+% \textcolor{color\modulo\netParensCount@clisp 5}{#1}%
+% }
+%   ... but this assumes that the colours have names of the form color<i>,
+%   where <i> is a positive integer
+
+%   reset the counter at the beginning of each listing
+%   (just in case there were unmatched parentheses in a previous listing)
+\lst@AddToHook{PreInit}{%
+  \global\netParensCount@clisp 0\relax%
+}
+
+\makeatother
+
+
+
+
+\lstnewenvironment{clips-code}[1][]
+{\lstset{language=clips,
+    #1
+  }}
+{}
+
+
+
+
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
