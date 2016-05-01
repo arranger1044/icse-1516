@@ -398,8 +398,10 @@
   \begin{clips-code}
     CLIPS> (bind ?x (** 2 5))
     32.0
-    CLIPS> (printout t ?x crlf)
+    CLIPS> (printout t ?x crlf) ;; CLIPS 6.26!!
     [EVALUATN1] Variable x is unbound
+    CLIPS> (printout t ?x crlf) ;; CLIPS 6.30
+    32.0
     CLIPS> (deffunction nth-pow-of-two (?n) (bind ?x (** 2 ?n)) ?x)
     CLIPS> (printout t ?x crlf)
     [EVALUATN1] Variable x is unbound
