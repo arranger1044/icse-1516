@@ -1,0 +1,360 @@
+CLIPS> (reset)
+CLIPS> (watch facts)
+CLIPS> (watch rules)
+CLIPS> (run 1)
+FIRE    1 start: f-0
+CLIPS> (run 1)
+FIRE    1 ask-a-question: f-8
+<== f-8     (question (attribute preferred-sweetness) (the-question "Do you generally prefer dry, medium, or sweet wines? ") (valid-answers dry medium sweet unknown) (already-asked FALSE) (precursors))
+==> f-53    (question (attribute preferred-sweetness) (the-question "Do you generally prefer dry, medium, or sweet wines? ") (valid-answers dry medium sweet unknown) (already-asked TRUE) (precursors))
+Do you generally prefer dry, medium, or sweet wines? dry
+==> f-54    (attribute (name preferred-sweetness) (value dry) (certainty 100.0))
+CLIPS> (agenda)
+0      ask-a-question: f-7
+0      ask-a-question: f-6
+0      ask-a-question: f-5
+0      ask-a-question: f-3
+0      ask-a-question: f-1
+For a total of 5 activations.
+CLIPS> (run 1)
+FIRE    1 ask-a-question: f-7
+<== f-7     (question (attribute preferred-color) (the-question "Do you generally prefer red or white wines? ") (valid-answers red white unknown) (already-asked FALSE) (precursors))
+==> f-55    (question (attribute preferred-color) (the-question "Do you generally prefer red or white wines? ") (valid-answers red white unknown) (already-asked TRUE) (precursors))
+Do you generally prefer red or white wines?  red
+==> f-56    (attribute (name preferred-color) (value red) (certainty 100.0))
+CLIPS> (agenda)
+0      ask-a-question: f-6
+0      ask-a-question: f-5
+0      ask-a-question: f-3
+0      ask-a-question: f-1
+For a total of 4 activations.
+CLIPS> (facts *)
+f-0     (initial-fact)
+f-1     (question (attribute main-component) (the-question "Is the main component of the meal meat, fish, or poultry? ") (valid-answers meat fish poultry unknown) (already-asked FALSE) (precursors))
+f-2     (question (attribute has-turkey) (the-question "Does the meal have turkey in it? ") (valid-answers yes no unknown) (already-asked FALSE) (precursors main-component is turkey))
+f-3     (question (attribute has-sauce) (the-question "Does the meal have a sauce on it? ") (valid-answers yes no unknown) (already-asked FALSE) (precursors))
+f-4     (question (attribute sauce) (the-question "Is the sauce for the meal spicy, sweet, cream, or tomato? ") (valid-answers sauce spicy sweet cream tomato unknown) (already-asked FALSE) (precursors has-sauce is yes))
+f-5     (question (attribute tastiness) (the-question "Is the flavor of the meal delicate, average, or strong? ") (valid-answers delicate average strong unknown) (already-asked FALSE) (precursors))
+f-6     (question (attribute preferred-body) (the-question "Do you generally prefer light, medium, or full bodied wines? ") (valid-answers light medium full unknown) (already-asked FALSE) (precursors))
+f-9     (rule (certainty 100.0) (if has-sauce is yes and sauce is spicy) (then best-body is full))
+f-10    (rule (certainty 100.0) (if tastiness is delicate) (then best-body is light))
+f-11    (rule (certainty 100.0) (if tastiness is average) (then best-body is light with certainty 30 and best-body is medium with certainty 60 and best-body is full with certainty 30))
+f-12    (rule (certainty 100.0) (if tastiness is strong) (then best-body is medium with certainty 40 and best-body is full with certainty 80))
+f-13    (rule (certainty 100.0) (if has-sauce is yes and sauce is cream) (then best-body is medium with certainty 40 and best-body is full with certainty 60))
+f-14    (rule (certainty 100.0) (if preferred-body is full) (then best-body is full with certainty 40))
+f-15    (rule (certainty 100.0) (if preferred-body is medium) (then best-body is medium with certainty 40))
+f-16    (rule (certainty 100.0) (if preferred-body is light) (then best-body is light with certainty 40))
+f-17    (rule (certainty 100.0) (if preferred-body is light and best-body is full) (then best-body is medium))
+f-18    (rule (certainty 100.0) (if preferred-body is full and best-body is light) (then best-body is medium))
+f-19    (rule (certainty 100.0) (if preferred-body is unknown) (then best-body is light with certainty 20 and best-body is medium with certainty 20 and best-body is full with certainty 20))
+f-20    (rule (certainty 100.0) (if main-component is meat) (then best-color is red with certainty 90))
+f-21    (rule (certainty 100.0) (if main-component is poultry and has-turkey is no) (then best-color is white with certainty 90 and best-color is red with certainty 30))
+f-22    (rule (certainty 100.0) (if main-component is poultry and has-turkey is yes) (then best-color is red with certainty 80 and best-color is white with certainty 50))
+f-23    (rule (certainty 100.0) (if main-component is fish) (then best-color is white))
+f-24    (rule (certainty 100.0) (if main-component is-not fish and has-sauce is yes and sauce is tomato) (then best-color is red))
+f-25    (rule (certainty 100.0) (if has-sauce is yes and sauce is cream) (then best-color is white with certainty 40))
+f-26    (rule (certainty 100.0) (if preferred-color is red) (then best-color is red with certainty 40))
+f-27    (rule (certainty 100.0) (if preferred-color is white) (then best-color is white with certainty 40))
+f-28    (rule (certainty 100.0) (if preferred-color is unknown) (then best-color is red with certainty 20 and best-color is white with certainty 20))
+f-29    (rule (certainty 100.0) (if has-sauce is yes and sauce is sweet) (then best-sweetness is sweet with certainty 90 and best-sweetness is medium with certainty 40))
+f-30    (rule (certainty 100.0) (if preferred-sweetness is dry) (then best-sweetness is dry with certainty 40))
+f-31    (rule (certainty 100.0) (if preferred-sweetness is medium) (then best-sweetness is medium with certainty 40))
+f-32    (rule (certainty 100.0) (if preferred-sweetness is sweet) (then best-sweetness is sweet with certainty 40))
+f-33    (rule (certainty 100.0) (if best-sweetness is sweet and preferred-sweetness is dry) (then best-sweetness is medium))
+f-34    (rule (certainty 100.0) (if best-sweetness is dry and preferred-sweetness is sweet) (then best-sweetness is medium))
+f-35    (rule (certainty 100.0) (if preferred-sweetness is unknown) (then best-sweetness is dry with certainty 20 and best-sweetness is medium with certainty 20 and best-sweetness is sweet with certainty 20))
+f-36    (attribute (name best-color) (value any) (certainty 100.0))
+f-37    (attribute (name best-body) (value any) (certainty 100.0))
+f-38    (attribute (name best-sweetness) (value any) (certainty 100.0))
+f-39    (wine (name Gamay) (color red) (body medium) (sweetness medium sweet))
+f-40    (wine (name Chablis) (color white) (body light) (sweetness dry))
+f-41    (wine (name Sauvignon-Blanc) (color white) (body medium) (sweetness dry))
+f-42    (wine (name Chardonnay) (color white) (body medium full) (sweetness medium dry))
+f-43    (wine (name Soave) (color white) (body light) (sweetness medium dry))
+f-44    (wine (name Riesling) (color white) (body light medium) (sweetness medium sweet))
+f-45    (wine (name Geverztraminer) (color white) (body full) (sweetness any))
+f-46    (wine (name Chenin-Blanc) (color white) (body light) (sweetness medium sweet))
+f-47    (wine (name Valpolicella) (color red) (body light) (sweetness any))
+f-48    (wine (name Cabernet-Sauvignon) (color red) (body any) (sweetness dry medium))
+f-49    (wine (name Zinfandel) (color red) (body any) (sweetness dry medium))
+f-50    (wine (name Pinot-Noir) (color red) (body medium) (sweetness medium))
+f-51    (wine (name Burgundy) (color red) (body full) (sweetness any))
+f-52    (wine (name Zinfandel) (color red) (body any) (sweetness dry medium))
+f-53    (question (attribute preferred-sweetness) (the-question "Do you generally prefer dry, medium, or sweet wines? ") (valid-answers dry medium sweet unknown) (already-asked TRUE) (precursors))
+f-54    (attribute (name preferred-sweetness) (value dry) (certainty 100.0))
+f-55    (question (attribute preferred-color) (the-question "Do you generally prefer red or white wines? ") (valid-answers red white unknown) (already-asked TRUE) (precursors))
+f-56    (attribute (name preferred-color) (value red) (certainty 100.0))
+For a total of 55 facts.
+CLIPS> (run 1)
+FIRE    1 ask-a-question: f-6
+<== f-6     (question (attribute preferred-body) (the-question "Do you generally prefer light, medium, or full bodied wines? ") (valid-answers light medium full unknown) (already-asked FALSE) (precursors))
+==> f-57    (question (attribute preferred-body) (the-question "Do you generally prefer light, medium, or full bodied wines? ") (valid-answers light medium full unknown) (already-asked TRUE) (precursors))
+Do you generally prefer light, medium, or full bodied wines? light
+==> f-58    (attribute (name preferred-body) (value light) (certainty 100.0))
+CLIPS> (run 1)
+FIRE    1 ask-a-question: f-5
+<== f-5     (question (attribute tastiness) (the-question "Is the flavor of the meal delicate, average, or strong? ") (valid-answers delicate average strong unknown) (already-asked FALSE) (precursors))
+==> f-59    (question (attribute tastiness) (the-question "Is the flavor of the meal delicate, average, or strong? ") (valid-answers delicate average strong unknown) (already-asked TRUE) (precursors))
+Is the flavor of the meal delicate, average, or strong? average
+==> f-60    (attribute (name tastiness) (value average) (certainty 100.0))
+CLIPS> (run 1)
+FIRE    1 ask-a-question: f-3
+<== f-3     (question (attribute has-sauce) (the-question "Does the meal have a sauce on it? ") (valid-answers yes no unknown) (already-asked FALSE) (precursors))
+==> f-61    (question (attribute has-sauce) (the-question "Does the meal have a sauce on it? ") (valid-answers yes no unknown) (already-asked TRUE) (precursors))
+Does the meal have a sauce on it? no
+==> f-62    (attribute (name has-sauce) (value no) (certainty 100.0))
+CLIPS> (run 1)
+FIRE    1 ask-a-question: f-1
+<== f-1     (question (attribute main-component) (the-question "Is the main component of the meal meat, fish, or poultry? ") (valid-answers meat fish poultry unknown) (already-asked FALSE) (precursors))
+==> f-63    (question (attribute main-component) (the-question "Is the main component of the meal meat, fish, or poultry? ") (valid-answers meat fish poultry unknown) (already-asked TRUE) (precursors))
+Is the main component of the meal meat, fish, or poultry? fish
+==> f-64    (attribute (name main-component) (value fish) (certainty 100.0))
+CLIPS> (agenda)
+0      startit: f-0
+For a total of 1 activation.
+CLIPS> (agenda *)
+MAIN:
+QUESTIONS:
+WINE-QUESTIONS:
+RULES:
+   0      remove-is-condition-when-satisfied: f-23,f-64
+   0      remove-is-condition-when-satisfied: f-11,f-60
+   0      remove-is-condition-when-satisfied: f-16,f-58
+   0      remove-is-condition-when-satisfied: f-17,f-58
+   0      remove-is-condition-when-satisfied: f-26,f-56
+   0      remove-is-condition-when-satisfied: f-30,f-54
+CHOOSE-QUALITIES:
+   0      startit: f-0
+WINES:
+PRINT-RESULTS:
+   10     header: f-0
+   0      end-spaces: f-0,
+For a total of 9 activations.
+CLIPS> (run 1)
+FIRE    1 startit: f-0
+CLIPS> (facts RULES)
+f-0     (initial-fact)
+f-9     (rule (certainty 100.0) (if has-sauce is yes and sauce is spicy) (then best-body is full))
+f-10    (rule (certainty 100.0) (if tastiness is delicate) (then best-body is light))
+f-11    (rule (certainty 100.0) (if tastiness is average) (then best-body is light with certainty 30 and best-body is medium with certainty 60 and best-body is full with certainty 30))
+f-12    (rule (certainty 100.0) (if tastiness is strong) (then best-body is medium with certainty 40 and best-body is full with certainty 80))
+f-13    (rule (certainty 100.0) (if has-sauce is yes and sauce is cream) (then best-body is medium with certainty 40 and best-body is full with certainty 60))
+f-14    (rule (certainty 100.0) (if preferred-body is full) (then best-body is full with certainty 40))
+f-15    (rule (certainty 100.0) (if preferred-body is medium) (then best-body is medium with certainty 40))
+f-16    (rule (certainty 100.0) (if preferred-body is light) (then best-body is light with certainty 40))
+f-17    (rule (certainty 100.0) (if preferred-body is light and best-body is full) (then best-body is medium))
+f-18    (rule (certainty 100.0) (if preferred-body is full and best-body is light) (then best-body is medium))
+f-19    (rule (certainty 100.0) (if preferred-body is unknown) (then best-body is light with certainty 20 and best-body is medium with certainty 20 and best-body is full with certainty 20))
+f-20    (rule (certainty 100.0) (if main-component is meat) (then best-color is red with certainty 90))
+f-21    (rule (certainty 100.0) (if main-component is poultry and has-turkey is no) (then best-color is white with certainty 90 and best-color is red with certainty 30))
+f-22    (rule (certainty 100.0) (if main-component is poultry and has-turkey is yes) (then best-color is red with certainty 80 and best-color is white with certainty 50))
+f-23    (rule (certainty 100.0) (if main-component is fish) (then best-color is white))
+f-24    (rule (certainty 100.0) (if main-component is-not fish and has-sauce is yes and sauce is tomato) (then best-color is red))
+f-25    (rule (certainty 100.0) (if has-sauce is yes and sauce is cream) (then best-color is white with certainty 40))
+f-26    (rule (certainty 100.0) (if preferred-color is red) (then best-color is red with certainty 40))
+f-27    (rule (certainty 100.0) (if preferred-color is white) (then best-color is white with certainty 40))
+f-28    (rule (certainty 100.0) (if preferred-color is unknown) (then best-color is red with certainty 20 and best-color is white with certainty 20))
+f-29    (rule (certainty 100.0) (if has-sauce is yes and sauce is sweet) (then best-sweetness is sweet with certainty 90 and best-sweetness is medium with certainty 40))
+f-30    (rule (certainty 100.0) (if preferred-sweetness is dry) (then best-sweetness is dry with certainty 40))
+f-31    (rule (certainty 100.0) (if preferred-sweetness is medium) (then best-sweetness is medium with certainty 40))
+f-32    (rule (certainty 100.0) (if preferred-sweetness is sweet) (then best-sweetness is sweet with certainty 40))
+f-33    (rule (certainty 100.0) (if best-sweetness is sweet and preferred-sweetness is dry) (then best-sweetness is medium))
+f-34    (rule (certainty 100.0) (if best-sweetness is dry and preferred-sweetness is sweet) (then best-sweetness is medium))
+f-35    (rule (certainty 100.0) (if preferred-sweetness is unknown) (then best-sweetness is dry with certainty 20 and best-sweetness is medium with certainty 20 and best-sweetness is sweet with certainty 20))
+f-36    (attribute (name best-color) (value any) (certainty 100.0))
+f-37    (attribute (name best-body) (value any) (certainty 100.0))
+f-38    (attribute (name best-sweetness) (value any) (certainty 100.0))
+f-54    (attribute (name preferred-sweetness) (value dry) (certainty 100.0))
+f-56    (attribute (name preferred-color) (value red) (certainty 100.0))
+f-58    (attribute (name preferred-body) (value light) (certainty 100.0))
+f-60    (attribute (name tastiness) (value average) (certainty 100.0))
+f-62    (attribute (name has-sauce) (value no) (certainty 100.0))
+f-64    (attribute (name main-component) (value fish) (certainty 100.0))
+For a total of 37 facts.
+CLIPS> (run 1)
+FIRE    1 remove-is-condition-when-satisfied: f-23,f-64
+<== f-23    (rule (certainty 100.0) (if main-component is fish) (then best-color is white))
+==> f-65    (rule (certainty 100.0) (if) (then best-color is white))
+CLIPS> (run 1)
+FIRE    1 perform-rule-consequent-without-certainty: f-65
+<== f-65    (rule (certainty 100.0) (if) (then best-color is white))
+==> f-66    (rule (certainty 100.0) (if) (then))
+==> f-67    (attribute (name best-color) (value white) (certainty 100.0))
+CLIPS> (run 1)
+FIRE    1 remove-is-condition-when-satisfied: f-11,f-60
+<== f-11    (rule (certainty 100.0) (if tastiness is average) (then best-body is light with certainty 30 and best-body is medium with certainty 60 and best-body is full with certainty 30))
+==> f-68    (rule (certainty 100.0) (if) (then best-body is light with certainty 30 and best-body is medium with certainty 60 and best-body is full with certainty 30))
+CLIPS> (run 1)
+FIRE    1 perform-rule-consequent-with-certainty: f-68
+<== f-68    (rule (certainty 100.0) (if) (then best-body is light with certainty 30 and best-body is medium with certainty 60 and best-body is full with certainty 30))
+==> f-69    (rule (certainty 100.0) (if) (then and best-body is medium with certainty 60 and best-body is full with certainty 30))
+==> f-70    (attribute (name best-body) (value light) (certainty 30.0))
+CLIPS> (run 1)
+FIRE    1 throw-away-ands-in-consequent: f-69
+<== f-69    (rule (certainty 100.0) (if) (then and best-body is medium with certainty 60 and best-body is full with certainty 30))
+==> f-71    (rule (certainty 100.0) (if) (then best-body is medium with certainty 60 and best-body is full with certainty 30))
+CLIPS> (run 1)
+FIRE    1 perform-rule-consequent-with-certainty: f-71
+<== f-71    (rule (certainty 100.0) (if) (then best-body is medium with certainty 60 and best-body is full with certainty 30))
+==> f-72    (rule (certainty 100.0) (if) (then and best-body is full with certainty 30))
+==> f-73    (attribute (name best-body) (value medium) (certainty 60.0))
+CLIPS> (run 1)
+FIRE    1 throw-away-ands-in-consequent: f-72
+<== f-72    (rule (certainty 100.0) (if) (then and best-body is full with certainty 30))
+==> f-74    (rule (certainty 100.0) (if) (then best-body is full with certainty 30))
+CLIPS> (run 1)
+FIRE    1 perform-rule-consequent-with-certainty: f-74
+<== f-74    (rule (certainty 100.0) (if) (then best-body is full with certainty 30))
+==> f-75    (rule (certainty 100.0) (if) (then))
+==> f-76    (attribute (name best-body) (value full) (certainty 30.0))
+CLIPS> (run 1)
+FIRE    1 remove-is-condition-when-satisfied: f-16,f-58
+<== f-16    (rule (certainty 100.0) (if preferred-body is light) (then best-body is light with certainty 40))
+==> f-77    (rule (certainty 100.0) (if) (then best-body is light with certainty 40))
+CLIPS> (run 1)
+FIRE    1 perform-rule-consequent-with-certainty: f-77
+<== f-77    (rule (certainty 100.0) (if) (then best-body is light with certainty 40))
+==> f-78    (rule (certainty 100.0) (if) (then))
+==> f-79    (attribute (name best-body) (value light) (certainty 40.0))
+CLIPS> (run 1)
+FIRE    1 combine-certainties: f-79,f-70
+<== f-79    (attribute (name best-body) (value light) (certainty 40.0))
+<== f-70    (attribute (name best-body) (value light) (certainty 30.0))
+==> f-80    (attribute (name best-body) (value light) (certainty 58.0))
+CLIPS> (run 1)
+FIRE    1 remove-is-condition-when-satisfied: f-17,f-58
+<== f-17    (rule (certainty 100.0) (if preferred-body is light and best-body is full) (then best-body is medium))
+==> f-81    (rule (certainty 100.0) (if and best-body is full) (then best-body is medium))
+CLIPS> (run 1)
+FIRE    1 throw-away-ands-in-antecedent: f-81
+<== f-81    (rule (certainty 100.0) (if and best-body is full) (then best-body is medium))
+==> f-82    (rule (certainty 100.0) (if best-body is full) (then best-body is medium))
+CLIPS> (run 1)
+FIRE    1 remove-is-condition-when-satisfied: f-82,f-76
+<== f-82    (rule (certainty 100.0) (if best-body is full) (then best-body is medium))
+==> f-83    (rule (certainty 30.0) (if) (then best-body is medium))
+CLIPS> (run 1)
+FIRE    1 perform-rule-consequent-without-certainty: f-83
+<== f-83    (rule (certainty 30.0) (if) (then best-body is medium))
+==> f-84    (rule (certainty 30.0) (if) (then))
+==> f-85    (attribute (name best-body) (value medium) (certainty 30.0))
+CLIPS> (run 1)
+FIRE    1 combine-certainties: f-85,f-73
+<== f-85    (attribute (name best-body) (value medium) (certainty 30.0))
+<== f-73    (attribute (name best-body) (value medium) (certainty 60.0))
+==> f-86    (attribute (name best-body) (value medium) (certainty 72.0))
+CLIPS> (run 1)
+FIRE    1 remove-is-condition-when-satisfied: f-26,f-56
+<== f-26    (rule (certainty 100.0) (if preferred-color is red) (then best-color is red with certainty 40))
+==> f-87    (rule (certainty 100.0) (if) (then best-color is red with certainty 40))
+CLIPS> (run 1)
+FIRE    1 perform-rule-consequent-with-certainty: f-87
+<== f-87    (rule (certainty 100.0) (if) (then best-color is red with certainty 40))
+==> f-88    (rule (certainty 100.0) (if) (then))
+==> f-89    (attribute (name best-color) (value red) (certainty 40.0))
+CLIPS> (run 1)
+FIRE    1 remove-is-condition-when-satisfied: f-30,f-54
+<== f-30    (rule (certainty 100.0) (if preferred-sweetness is dry) (then best-sweetness is dry with certainty 40))
+==> f-90    (rule (certainty 100.0) (if) (then best-sweetness is dry with certainty 40))
+CLIPS> (run 1)
+FIRE    1 perform-rule-consequent-with-certainty: f-90
+<== f-90    (rule (certainty 100.0) (if) (then best-sweetness is dry with certainty 40))
+==> f-91    (rule (certainty 100.0) (if) (then))
+==> f-92    (attribute (name best-sweetness) (value dry) (certainty 40.0))
+CLIPS> (run 1)
+FIRE    1 remove-is-condition-when-satisfied: f-34,f-92
+<== f-34    (rule (certainty 100.0) (if best-sweetness is dry and preferred-sweetness is sweet) (then best-sweetness is medium))
+==> f-93    (rule (certainty 40.0) (if and preferred-sweetness is sweet) (then best-sweetness is medium))
+CLIPS> (run 1)
+FIRE    1 throw-away-ands-in-antecedent: f-93
+<== f-93    (rule (certainty 40.0) (if and preferred-sweetness is sweet) (then best-sweetness is medium))
+==> f-94    (rule (certainty 40.0) (if preferred-sweetness is sweet) (then best-sweetness is medium))
+CLIPS> (run 1)
+FIRE    1 generate-wines: f-42,f-67,f-76,f-92
+==> f-95    (attribute (name wine) (value Chardonnay) (certainty 30.0))
+CLIPS> (run 1)
+FIRE    1 generate-wines: f-40,f-67,f-80,f-92
+==> f-96    (attribute (name wine) (value Chablis) (certainty 40.0))
+CLIPS> (run 1)
+FIRE    1 generate-wines: f-43,f-67,f-80,f-92
+==> f-97    (attribute (name wine) (value Soave) (certainty 40.0))
+CLIPS> (run 1)
+FIRE    1 generate-wines: f-41,f-67,f-86,f-92
+==> f-98    (attribute (name wine) (value Sauvignon-Blanc) (certainty 40.0))
+CLIPS> (run 1)
+FIRE    1 generate-wines: f-42,f-67,f-86,f-92
+==> f-99    (attribute (name wine) (value Chardonnay) (certainty 40.0))
+CLIPS> (run 1)
+FIRE    1 combine-certainties: f-99,f-95
+<== f-99    (attribute (name wine) (value Chardonnay) (certainty 40.0))
+<== f-95    (attribute (name wine) (value Chardonnay) (certainty 30.0))
+==> f-100   (attribute (name wine) (value Chardonnay) (certainty 58.0))
+CLIPS> (run 1)
+FIRE    1 generate-wines: f-52,f-89,f-37,f-92
+==> f-101   (attribute (name wine) (value Zinfandel) (certainty 40.0))
+CLIPS> (run 1)
+FIRE    1 generate-wines: f-49,f-89,f-37,f-92
+==> f-102   (attribute (name wine) (value Zinfandel) (certainty 40.0))
+CLIPS> (run 1)
+FIRE    1 combine-certainties: f-102,f-101
+<== f-102   (attribute (name wine) (value Zinfandel) (certainty 40.0))
+<== f-101   (attribute (name wine) (value Zinfandel) (certainty 40.0))
+==> f-103   (attribute (name wine) (value Zinfandel) (certainty 64.0))
+CLIPS> (run 1)
+FIRE    1 generate-wines: f-48,f-89,f-37,f-92
+==> f-104   (attribute (name wine) (value Cabernet-Sauvignon) (certainty 40.0))
+CLIPS> (run 1)
+FIRE    1 generate-wines: f-47,f-89,f-80,f-38
+==> f-105   (attribute (name wine) (value Valpolicella) (certainty 40.0))
+CLIPS> (run 1)
+FIRE    1 generate-wines: f-51,f-89,f-76,f-38
+==> f-106   (attribute (name wine) (value Burgundy) (certainty 30.0))
+CLIPS> (run 1)
+FIRE    1 generate-wines: f-45,f-67,f-76,f-38
+==> f-107   (attribute (name wine) (value Geverztraminer) (certainty 30.0))
+CLIPS> (run 1)
+FIRE    1 header: f-0
+
+        SELECTED WINES
+
+ WINE                  CERTAINTY
+ -------------------------------
+==> f-108   (phase print-wines)
+CLIPS> (run 1)
+FIRE    1 print-wine: f-103,
+<== f-103   (attribute (name wine) (value Zinfandel) (certainty 64.0))
+ Zinfandel                64%
+CLIPS> (run 1)
+FIRE    1 print-wine: f-100,
+<== f-100   (attribute (name wine) (value Chardonnay) (certainty 58.0))
+ Chardonnay               58%
+CLIPS> (run 1)
+FIRE    1 print-wine: f-96,
+<== f-96    (attribute (name wine) (value Chablis) (certainty 40.0))
+ Chablis                  40%
+CLIPS> (run 1)
+FIRE    1 print-wine: f-97,
+<== f-97    (attribute (name wine) (value Soave) (certainty 40.0))
+ Soave                    40%
+CLIPS> (run 1)
+FIRE    1 print-wine: f-98,
+<== f-98    (attribute (name wine) (value Sauvignon-Blanc) (certainty 40.0))
+ Sauvignon-Blanc          40%
+CLIPS> (run 1)
+FIRE    1 print-wine: f-104,
+<== f-104   (attribute (name wine) (value Cabernet-Sauvignon) (certainty 40.0))
+ Cabernet-Sauvignon       40%
+CLIPS> (run 1)
+FIRE    1 print-wine: f-105,
+<== f-105   (attribute (name wine) (value Valpolicella) (certainty 40.0))
+ Valpolicella             40%
+CLIPS> (run 1)
+FIRE    1 print-wine: f-106,
+<== f-106   (attribute (name wine) (value Burgundy) (certainty 30.0))
+ Burgundy                 30%
+CLIPS> (run 1)
+FIRE    1 print-wine: f-107,
+<== f-107   (attribute (name wine) (value Geverztraminer) (certainty 30.0))
+ Geverztraminer           30%
+CLIPS> (run 1)
+FIRE    1 end-spaces: f-0,
